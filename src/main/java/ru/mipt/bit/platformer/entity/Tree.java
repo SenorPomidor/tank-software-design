@@ -1,14 +1,28 @@
 package ru.mipt.bit.platformer.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
+import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
 
-public class Tree extends GameObject {
+public class Tree implements ObstacleEntity {
 
-    public Tree(String texturePath, GridPoint2 initialCoordinates) {
-        super(texturePath);
-        this.coordinates = initialCoordinates;
+    private final GridPoint2 currentCoordinates;
+
+    public Tree(GridPoint2 startCoordinates) {
+        currentCoordinates = startCoordinates;
     }
 
+    @Override
+    public GridPoint2 getCurrentCoordinates() {
+        return currentCoordinates;
+    }
+
+    @Override
+    public float getRotation() {
+        return 0f;
+    }
+
+    @Override
+    public GridPoint2 getCoordinates() {
+        return currentCoordinates;
+    }
 }
-
-

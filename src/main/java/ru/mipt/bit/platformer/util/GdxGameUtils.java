@@ -99,4 +99,8 @@ public final class GdxGameUtils {
                 .setHeight(tileHeight)
                 .getCenter(new Vector2());
     }
+
+    public static boolean collides(GridPoint2 object1, GridPoint2 object2) {
+        return object1.equals(object2);
+    }
 }
