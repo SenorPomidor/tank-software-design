@@ -1,11 +1,10 @@
-package ru.mipt.bit.platformer.renderable;
+package ru.mipt.bit.platformer.renderable.impl;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import ru.mipt.bit.platformer.entity.Tree;
 import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
 import ru.mipt.bit.platformer.renderable.interfaces.ObstacleRenderable;
 
@@ -16,13 +15,13 @@ public class ObstacleRenderableImpl implements ObstacleRenderable {
     private final Texture texture;
     private final TextureRegion textureRegion;
     private final Rectangle rectangle;
-    private final ObstacleEntity tree;
+    private final ObstacleEntity obstacle;
 
-    public ObstacleRenderableImpl(String fileNameTexture, ObstacleEntity tree) {
+    public ObstacleRenderableImpl(String fileNameTexture, ObstacleEntity obstacle) {
         texture = new Texture(fileNameTexture);
         textureRegion = new TextureRegion(texture);
         rectangle = createBoundingRectangle(textureRegion);
-        this.tree = tree;
+        this.obstacle = obstacle;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class ObstacleRenderableImpl implements ObstacleRenderable {
         moveRectangleAtTileCenter(
                 tileLayer,
                 this.rectangle,
-                tree.getCurrentCoordinates()
+                obstacle.getCoordinates()
         );
     }
 }

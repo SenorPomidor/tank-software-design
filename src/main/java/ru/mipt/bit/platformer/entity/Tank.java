@@ -1,14 +1,19 @@
 package ru.mipt.bit.platformer.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.entity.interfces.TankEntity;
+import ru.mipt.bit.platformer.controller.impl.ShootingActionImpl;
+import ru.mipt.bit.platformer.controller.interfaces.Action;
+import ru.mipt.bit.platformer.entity.interfces.GameEntity;
+import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
+import ru.mipt.bit.platformer.controller.impl.DirectionKeyBoardActionImpl;
+
+import java.util.List;
+import java.util.Optional;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
-import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 
-public class Tank implements TankEntity {
+public class Tank implements PlayerEntity {
 
-    private static final float MOVEMENT_SPEED = 0.4f;
     private static final float MOVEMENT_COMPLETED = 1f;
     private static final int MOVEMENT_STARTED = 0;
 
@@ -23,32 +28,9 @@ public class Tank implements TankEntity {
     }
 
     @Override
-    public void moveTo(GridPoint2 tankTargetCoordinates) {
-        destinationCoordinates = tankTargetCoordinates;
+    public void moveTo(GridPoint2 targetCoordinates) {
+        destinationCoordinates = targetCoordinates;
         movementProgress = MOVEMENT_STARTED;
-    }
-
-    @Override
-    public void updateMovementState(float deltaTime) {
-        movementProgress = continueProgress(movementProgress, deltaTime, MOVEMENT_SPEED);
-        if (isEqual(movementProgress, MOVEMENT_COMPLETED)) {
-            currentCoordinates.set(destinationCoordinates);
-        }
-    }
-
-    @Override
-    public float getMovementProgress() {
-        return movementProgress;
-    }
-
-    @Override
-    public GridPoint2 getCurrentCoordinates() {
-        return currentCoordinates;
-    }
-
-    @Override
-    public GridPoint2 getDestinationCoordinates() {
-        return destinationCoordinates;
     }
 
     @Override
@@ -57,12 +39,58 @@ public class Tank implements TankEntity {
     }
 
     @Override
+    public void updateState(float newMovementProgress) {
+        movementProgress = newMovementProgress;
+        if (isEqual(movementProgress, MOVEMENT_COMPLETED)) {
+            currentCoordinates.set(destinationCoordinates);
+        }
+    }
+
+    @Override
+    public void updatePlayerMovement(Action action, List<GameEntity> gameEntities, float deltaTime) {
+        if (isEqualMethod() && action != null) {
+            DirectionKeyBoardActionImpl directionKeyBoardActionImpl = (DirectionKeyBoardActionImpl) action;
+            GridPoint2 destinationCoordinates = directionKeyBoardActionImpl.apply(currentCoordinates);
+            Optional<GameEntity> anyObject = gameEntities.stream()
+                    .filter(object -> object.getCoordinates().equals(destinationCoordinates))
+                    .findAny();
+            if (anyObject.isEmpty()) {
+                moveTo(destinationCoordinates);
+            }
+            setRotation(directionKeyBoardActionImpl.getRotation());
+        }
+    }
+
+    @Override
+    public void shoot(Action action) {
+        ShootingActionImpl directionActionImpl = (ShootingActionImpl) action;
+
+        // при нажатии на пробел, в консоли можно увидеть "ПИФ-ПАФ"
+        System.out.println("ПИФ-ПАФ");
+    }
+
+    @Override
     public float getRotation() {
         return rotation;
+    }
+
+    @Override
+    public float getMovementProgress() {
+        return movementProgress;
     }
 
     @Override
     public GridPoint2 getCoordinates() {
         return currentCoordinates;
     }
+
+    @Override
+    public GridPoint2 getDestinationCoordinates() {
+        return destinationCoordinates;
+    }
+
+    private boolean isEqualMethod() {
+        return isEqual(movementProgress, 1f);
+    }
+
 }

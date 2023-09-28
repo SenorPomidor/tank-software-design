@@ -12,16 +12,6 @@ public class Tree implements ObstacleEntity {
     }
 
     @Override
-    public GridPoint2 getCurrentCoordinates() {
-        return currentCoordinates;
-    }
-
-    @Override
-    public float getRotation() {
-        return 0f;
-    }
-
-    @Override
     public GridPoint2 getCoordinates() {
         return currentCoordinates;
     }
