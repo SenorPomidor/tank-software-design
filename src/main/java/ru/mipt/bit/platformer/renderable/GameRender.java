@@ -41,7 +41,7 @@ public class GameRender {
         Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    public void updateGameState(TileMovement tileMovement) {
+    public void updateGameGraphics(TileMovement tileMovement) {
         for (PlayerRenderable tankRender : playerRenderables) {
             tankRender.updateGameGraphics(tileMovement);
         }

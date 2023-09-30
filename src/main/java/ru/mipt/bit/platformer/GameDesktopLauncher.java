@@ -38,8 +38,9 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
+        gameLevel.checkIsTriggeredKeyAndExecuteCommand(deltaTime);
         gameLevel.updateGameState(deltaTime);
-        gameRender.updateGameState(gameLevel.getTileMovement());
+        gameRender.updateGameGraphics(gameLevel.getTileMovement());
 
         gameRender.renderGame();
     }
@@ -61,7 +62,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        gameLevel.dispose();
+        gameLevel.getLevel().dispose();
         gameRender.dispose();
     }
 }

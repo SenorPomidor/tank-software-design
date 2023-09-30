@@ -3,14 +3,14 @@ package ru.mipt.bit.platformer.controller.impl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.controller.interfaces.DirectionKeyBoardAction;
+import ru.mipt.bit.platformer.controller.interfaces.Action;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
 
 import java.util.Arrays;
 import java.util.List;
 
-public enum DirectionKeyBoardActionImpl implements DirectionKeyBoardAction {
+public enum DirectionKeyBoardAction implements Action {
 
     UP(new GridPoint2(0, 1), 90f, Keys.UP, Keys.W),
     DOWN(new GridPoint2(0, -1), -90f, Keys.DOWN, Keys.S),
@@ -21,7 +21,7 @@ public enum DirectionKeyBoardActionImpl implements DirectionKeyBoardAction {
     private final GridPoint2 coordinates;
     private final Integer[] keys;
 
-    DirectionKeyBoardActionImpl(GridPoint2 coordinates, float rotation, Integer... keys) {
+    DirectionKeyBoardAction(GridPoint2 coordinates, float rotation, Integer... keys) {
         this.coordinates = coordinates;
         this.rotation = rotation;
         this.keys = keys;

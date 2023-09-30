@@ -4,7 +4,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.utils.Disposable;
 import ru.mipt.bit.platformer.controller.InputController;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
@@ -22,7 +21,7 @@ import static com.badlogic.gdx.math.MathUtils.isEqual;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
 
-public class GameLevel implements Disposable {
+public class GameLevel {
 
     private static final float MOVEMENT_SPEED = 0.4f;
 
@@ -65,13 +64,15 @@ public class GameLevel implements Disposable {
         return obstacleGraphics;
     }
 
+    public void checkIsTriggeredKeyAndExecuteCommand(float deltaTime) {
+        for (PlayerEntity playerEntity : playerEntities) {
+            inputController.checkIsTriggeredKeyAndExecuteCommand(playerEntity, gameEntities, deltaTime);
+        }
+    }
+
     public void updateGameState(float deltaTime) {
         for (PlayerEntity playerEntity : playerEntities) {
             playerEntity.updateState(continueProgress(playerEntity.getMovementProgress(), deltaTime, MOVEMENT_SPEED));
-
-            inputController.executeTriggeredDirection(playerEntity, gameEntities, deltaTime);
-            inputController.executeTriggeredShooting(playerEntity);
-            // тут также можно добавить отслеживание джостика, напрмиер
         }
     }
 
@@ -81,10 +82,5 @@ public class GameLevel implements Disposable {
 
     public TileMovement getTileMovement() {
         return tileMovement;
-    }
-
-    @Override
-    public void dispose() {
-        level.dispose();
     }
 }

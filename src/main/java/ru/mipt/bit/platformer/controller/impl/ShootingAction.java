@@ -2,18 +2,20 @@ package ru.mipt.bit.platformer.controller.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import ru.mipt.bit.platformer.controller.interfaces.ShootingAction;
+import ru.mipt.bit.platformer.controller.interfaces.Action;
+import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
 
 import java.util.Arrays;
+import java.util.List;
 
-public enum ShootingActionImpl implements ShootingAction {
+public enum ShootingAction implements Action {
 
     SHOOT(Keys.SPACE);
 
     private final Integer[] keys;
 
-    ShootingActionImpl(Integer... keys) {
+    ShootingAction(Integer... keys) {
         this.keys = keys;
     }
 
@@ -23,7 +25,7 @@ public enum ShootingActionImpl implements ShootingAction {
     }
 
     @Override
-    public void execute(PlayerEntity playerEntity) {
+    public void execute(PlayerEntity playerEntity, List<GameEntity> gameEntities, float deltaTime) {
         playerEntity.shoot(this);
     }
 }

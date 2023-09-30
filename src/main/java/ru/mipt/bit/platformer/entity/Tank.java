@@ -1,11 +1,11 @@
 package ru.mipt.bit.platformer.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.controller.impl.ShootingActionImpl;
+import ru.mipt.bit.platformer.controller.impl.ShootingAction;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
-import ru.mipt.bit.platformer.controller.impl.DirectionKeyBoardActionImpl;
+import ru.mipt.bit.platformer.controller.impl.DirectionKeyBoardAction;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +49,7 @@ public class Tank implements PlayerEntity {
     @Override
     public void updatePlayerMovement(Action action, List<GameEntity> gameEntities, float deltaTime) {
         if (isEqualMethod() && action != null) {
-            DirectionKeyBoardActionImpl directionKeyBoardActionImpl = (DirectionKeyBoardActionImpl) action;
+            DirectionKeyBoardAction directionKeyBoardActionImpl = (DirectionKeyBoardAction) action;
             GridPoint2 destinationCoordinates = directionKeyBoardActionImpl.apply(currentCoordinates);
             Optional<GameEntity> anyObject = gameEntities.stream()
                     .filter(object -> object.getCoordinates().equals(destinationCoordinates))
@@ -63,7 +63,7 @@ public class Tank implements PlayerEntity {
 
     @Override
     public void shoot(Action action) {
-        ShootingActionImpl directionActionImpl = (ShootingActionImpl) action;
+        ShootingAction directionActionImpl = (ShootingAction) action;
 
         // при нажатии на пробел, в консоли можно увидеть "ПИФ-ПАФ"
         System.out.println("ПИФ-ПАФ");
