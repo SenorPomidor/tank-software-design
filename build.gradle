@@ -16,6 +16,15 @@ application {
     }
 }
 
+def props = new Properties()
+file('src/main/resources/application.properties').withInputStream {props.load(it)}
+
+tasks.withType(JavaExec) {
+    props.each { key, value ->
+        systemProperty key.toString(), value.toString()
+    }
+}
+
 repositories {
     mavenCentral()
 }

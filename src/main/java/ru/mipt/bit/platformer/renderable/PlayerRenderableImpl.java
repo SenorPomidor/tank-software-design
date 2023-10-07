@@ -1,4 +1,4 @@
-package ru.mipt.bit.platformer.renderable.impl;
+package ru.mipt.bit.platformer.renderable;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -45,4 +45,8 @@ public class PlayerRenderableImpl implements PlayerRenderable {
         );
     }
 
+    @Override
+    public PlayerEntity getGameEntity() {
+        return playerEntity;
+    }
 }

@@ -1,10 +1,11 @@
-package ru.mipt.bit.platformer.renderable.impl;
+package ru.mipt.bit.platformer.renderable;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
+import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
 import ru.mipt.bit.platformer.renderable.interfaces.ObstacleRenderable;
 
@@ -41,5 +42,10 @@ public class ObstacleRenderableImpl implements ObstacleRenderable {
                 this.rectangle,
                 obstacle.getCoordinates()
         );
+    }
+
+    @Override
+    public GameEntity getGameEntity() {
+        return obstacle;
     }
 }

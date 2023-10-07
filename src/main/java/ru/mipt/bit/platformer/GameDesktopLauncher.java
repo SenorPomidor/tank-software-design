@@ -2,14 +2,14 @@ package ru.mipt.bit.platformer;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.controller.InputController;
-import ru.mipt.bit.platformer.entity.Tank;
-import ru.mipt.bit.platformer.entity.Tree;
 import ru.mipt.bit.platformer.level.GameLevel;
+import ru.mipt.bit.platformer.level.InitialLevel;
+import ru.mipt.bit.platformer.level.generation.LevelGeneration;
+import ru.mipt.bit.platformer.level.generation.LevelGenerationStrategy;
 import ru.mipt.bit.platformer.renderable.GameRender;
-import ru.mipt.bit.platformer.renderable.interfaces.ObstacleRenderable;
-import ru.mipt.bit.platformer.renderable.interfaces.PlayerRenderable;
+
+import static ru.mipt.bit.platformer.common.CommonVariables.GENERATE_FROM;
 
 public class GameDesktopLauncher implements ApplicationListener {
 
@@ -22,14 +22,12 @@ public class GameDesktopLauncher implements ApplicationListener {
         inputController.initActions();
 
         gameLevel = new GameLevel(inputController);
+        gameRender = new GameRender(gameLevel.getLevel(), gameLevel);
 
-        PlayerRenderable playerRenderable = gameLevel.addPlayer(new Tank(new GridPoint2(1, 1)));
-        ObstacleRenderable obstacleRenderable = gameLevel.addObstacle(new Tree(new GridPoint2(3, 3)));
-
-        gameRender = new GameRender(gameLevel.getLevel());
-
-        gameRender.addPlayerRenderable(playerRenderable);
-        gameRender.addObstacleRenderable(obstacleRenderable);
+        LevelGenerationStrategy factory = new LevelGenerationStrategy();
+        LevelGeneration levelGeneration = factory.createStrategy(GENERATE_FROM);
+        InitialLevel initialLevel = new InitialLevel(levelGeneration);
+        initialLevel.initLevelMethod(gameRender);
     }
 
     @Override

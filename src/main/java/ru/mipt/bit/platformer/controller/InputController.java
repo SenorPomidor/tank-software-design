@@ -1,7 +1,5 @@
 package ru.mipt.bit.platformer.controller;
 
-import ru.mipt.bit.platformer.controller.impl.DirectionKeyBoardAction;
-import ru.mipt.bit.platformer.controller.impl.ShootingAction;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
