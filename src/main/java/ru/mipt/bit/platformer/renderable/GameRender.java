@@ -59,6 +59,9 @@ public class GameRender implements GameObjectListener {
     }
 
     public void renderGame() {
+        System.out.println("playerRenderables " + playerRenderables.size());
+        System.out.println("obstacleRenderables " + obstacleRenderables.size());
+
         levelRenderer.render();
         batch.begin();
 
