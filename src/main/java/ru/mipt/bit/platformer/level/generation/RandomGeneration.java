@@ -1,7 +1,7 @@
 package ru.mipt.bit.platformer.level.generation;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.renderable.GameRender;
+import ru.mipt.bit.platformer.level.GameLevel;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -16,9 +16,9 @@ public class RandomGeneration implements LevelGeneration {
     private final Set<GridPoint2> occupiedPositions = new HashSet<>();
 
     @Override
-    public void generate(GameRender gameRender) {
+    public GameLevel generate(GameLevel gameLevel) {
         GridPoint2 startCoordinates = new GridPoint2(1, 1);
-        gameRender.createTank(startCoordinates);
+        gameLevel.createTank(startCoordinates);
         occupiedPositions.add(startCoordinates);
 
         IntStream.range(0, OBSTACLE_COUNT)
@@ -31,7 +31,9 @@ public class RandomGeneration implements LevelGeneration {
                     } while (occupiedPositions.contains(position));
                     occupiedPositions.add(position);
 
-                    gameRender.createTree(position);
+                    gameLevel.createTree(position);
                 });
+
+        return gameLevel;
     }
 }

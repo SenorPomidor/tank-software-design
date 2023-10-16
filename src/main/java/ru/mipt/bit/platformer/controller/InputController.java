@@ -10,10 +10,12 @@ public class InputController {
 
     private final List<Action> actions = new ArrayList<>();
 
-    public void checkIsTriggeredKeyAndExecuteCommand(PlayerEntity playerEntity, List<GameEntity> gameEntities, float deltaTime) {
-        for (Action action : actions) {
-            if (action.isTriggered()) {
-                action.execute(playerEntity, gameEntities, deltaTime);
+    public void checkIsTriggeredKeyAndExecuteCommand(List<PlayerEntity> playerEntities, List<GameEntity> gameEntities, float deltaTime) {
+        for (PlayerEntity playerEntity : playerEntities) {
+            for (Action action : actions) {
+                if (action.isTriggered()) {
+                    action.execute(playerEntity, gameEntities, deltaTime);
+                }
             }
         }
     }

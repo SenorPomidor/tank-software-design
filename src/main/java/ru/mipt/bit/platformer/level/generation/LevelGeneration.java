@@ -1,8 +1,8 @@
 package ru.mipt.bit.platformer.level.generation;
 
-import ru.mipt.bit.platformer.renderable.GameRender;
+import ru.mipt.bit.platformer.level.GameLevel;
 
 public interface LevelGeneration {
 
-    void generate(GameRender gameRender);
+    GameLevel generate(GameLevel gameLevel);
 }

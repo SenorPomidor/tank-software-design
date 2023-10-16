@@ -1,7 +1,6 @@
 package ru.mipt.bit.platformer.level;
 
 import ru.mipt.bit.platformer.level.generation.LevelGeneration;
-import ru.mipt.bit.platformer.renderable.GameRender;
 
 public class InitialLevel {
 
@@ -11,8 +10,8 @@ public class InitialLevel {
         this.strategy = strategy;
     }
 
-    public void initLevelMethod(GameRender gameRender) {
-        strategy.generate(gameRender);
+    public GameLevel initLevelMethod(GameLevel gameLevel) {
+        return strategy.generate(gameLevel);
     }
 
 }

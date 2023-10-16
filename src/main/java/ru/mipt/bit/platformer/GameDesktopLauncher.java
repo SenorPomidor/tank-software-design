@@ -15,19 +15,23 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     private GameLevel gameLevel;
     private GameRender gameRender;
+    private InputController inputController;
 
     @Override
     public void create() {
-        InputController inputController = new InputController();
-        inputController.initActions();
+        gameLevel = new GameLevel();
 
-        gameLevel = new GameLevel(inputController);
-        gameRender = new GameRender(gameLevel.getLevel(), gameLevel);
+        gameRender = new GameRender(gameLevel.getTiledMap(), gameLevel.getGroundLayer());
+
+        gameLevel.addListener(gameRender);
 
         LevelGenerationStrategy factory = new LevelGenerationStrategy();
         LevelGeneration levelGeneration = factory.createStrategy(GENERATE_FROM);
         InitialLevel initialLevel = new InitialLevel(levelGeneration);
-        initialLevel.initLevelMethod(gameRender);
+        gameLevel = initialLevel.initLevelMethod(gameLevel);
+
+        inputController = new InputController();
+        inputController.initActions();
     }
 
     @Override
@@ -36,7 +40,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
         float deltaTime = Gdx.graphics.getDeltaTime();
 
-        gameLevel.checkIsTriggeredKeyAndExecuteCommand(deltaTime);
+        inputController.checkIsTriggeredKeyAndExecuteCommand(gameLevel.getPlayerEntities(), gameLevel.getGameEntities(), deltaTime);
         gameLevel.updateGameState(deltaTime);
         gameRender.updateGameGraphics(gameLevel.getTileMovement());
 
@@ -60,7 +64,7 @@ public class GameDesktopLauncher implements ApplicationListener {
 
     @Override
     public void dispose() {
-        gameLevel.getLevel().dispose();
+        gameLevel.getTiledMap().dispose();
         gameRender.dispose();
     }
 }

@@ -18,7 +18,7 @@ public class PlayerRenderableImpl implements PlayerRenderable {
     private final Rectangle rectangle;
     private final PlayerEntity playerEntity;
 
-    public PlayerRenderableImpl(String fileNameTexture, PlayerEntity playerEntity) {
+    public PlayerRenderableImpl(PlayerEntity playerEntity, String fileNameTexture) {
         texture = new Texture(fileNameTexture);
         textureRegion = new TextureRegion(texture);
         rectangle = createBoundingRectangle(textureRegion);

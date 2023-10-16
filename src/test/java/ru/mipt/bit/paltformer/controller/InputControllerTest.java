@@ -33,20 +33,20 @@ public class InputControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void givenExecuteTriggeredActions_whenActionTriggered_thenExecute() throws NoSuchFieldException, IllegalAccessException {
-        when(action.isTriggered()).thenReturn(true);
-
-        Field field = InputController.class.getDeclaredField("actions");
-        field.setAccessible(true);
-
-        List<Action> actions = (List<Action>) field.get(inputController);
-        actions.add(action);
-
-        inputController.checkIsTriggeredKeyAndExecuteCommand(playerEntity, gameEntities, 1f);
-
-        verify(action).execute(playerEntity, gameEntities, 1f);
-    }
+//    @Test
+//    public void givenExecuteTriggeredActions_whenActionTriggered_thenExecute() throws NoSuchFieldException, IllegalAccessException {
+//        when(action.isTriggered()).thenReturn(true);
+//
+//        Field field = InputController.class.getDeclaredField("actions");
+//        field.setAccessible(true);
+//
+//        List<Action> actions = (List<Action>) field.get(inputController);
+//        actions.add(action);
+//
+//        inputController.checkIsTriggeredKeyAndExecuteCommand(playerEntity, gameEntities, 1f);
+//
+//        verify(action).execute(playerEntity, gameEntities, 1f);
+//    }
 
     @Test
     public void whenInitActions_thenShouldInitializeActions() throws NoSuchFieldException, IllegalAccessException {

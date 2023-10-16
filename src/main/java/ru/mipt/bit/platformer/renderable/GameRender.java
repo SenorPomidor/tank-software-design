@@ -5,14 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
-import ru.mipt.bit.platformer.level.GameLevel;
+import ru.mipt.bit.platformer.level.interfaces.GameObjectListener;
 import ru.mipt.bit.platformer.renderable.interfaces.ObstacleRenderable;
-import ru.mipt.bit.platformer.renderable.strategy.TankCreationStrategy;
-import ru.mipt.bit.platformer.renderable.strategy.TreeCreationStrategy;
-import ru.mipt.bit.platformer.renderable.strategy.interfaces.EntityCreationStrategy;
 import ru.mipt.bit.platformer.renderable.interfaces.PlayerRenderable;
 import ru.mipt.bit.platformer.util.TileMovement;
 
@@ -22,27 +19,19 @@ import java.util.List;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
 
-public class GameRender {
+public class GameRender implements GameObjectListener {
 
     private final Batch batch;
     private final MapRenderer levelRenderer;
-    private final GameLevel gameLevel;
+    private final TiledMapTileLayer groundLayer;
 
     private final List<PlayerRenderable> playerRenderables = new ArrayList<>();
     private final List<ObstacleRenderable> obstacleRenderables = new ArrayList<>();
 
-    public GameRender(TiledMap tiledMap, GameLevel gameLevel) {
+    public GameRender(TiledMap tiledMap, TiledMapTileLayer groundLayer) {
         this.batch = new SpriteBatch();
-        this.gameLevel = gameLevel;
+        this.groundLayer = groundLayer;
         levelRenderer = createSingleLayerMapRenderer(tiledMap, batch);
-    }
-
-    public void createTank(GridPoint2 coordinates) {
-        createPlayer(coordinates, new TankCreationStrategy());
-    }
-
-    public void createTree(GridPoint2 coordinates) {
-        createObstacle(coordinates, new TreeCreationStrategy());
     }
 
     public void clearScreen() {
@@ -54,6 +43,19 @@ public class GameRender {
         for (PlayerRenderable tankRender : playerRenderables) {
             tankRender.updateGameGraphics(tileMovement);
         }
+    }
+
+    @Override
+    public void onPlayerAdded(PlayerEntity playerEntity, String texture) {
+        playerRenderables.add(new PlayerRenderableImpl(playerEntity, texture));
+    }
+
+    @Override
+    public void onObstacleAdded(ObstacleEntity obstacleEntity, String texture) {
+        ObstacleRenderable obstacleRenderable = new ObstacleRenderableImpl(obstacleEntity, texture);
+
+        obstacleRenderables.add(obstacleRenderable);
+        obstacleRenderable.moveObstacle(groundLayer);
     }
 
     public void renderGame() {
@@ -81,19 +83,5 @@ public class GameRender {
         }
 
         batch.dispose();
-    }
-
-    private void createPlayer(GridPoint2 coordinates, EntityCreationStrategy<PlayerRenderable> entityStrategy) {
-        PlayerRenderable playerRenderable = entityStrategy.createEntity(coordinates);
-        gameLevel.addPlayer((PlayerEntity) playerRenderable.getGameEntity());
-
-        playerRenderables.add(playerRenderable);
-    }
-
-    private void createObstacle(GridPoint2 coordinates, EntityCreationStrategy<ObstacleRenderable> entityStrategy) {
-        ObstacleRenderable obstacleRenderable = entityStrategy.createEntity(coordinates);
-        gameLevel.addObstacle(obstacleRenderable, (ObstacleEntity) obstacleRenderable.getGameEntity());
-
-        obstacleRenderables.add(obstacleRenderable);
     }
 }

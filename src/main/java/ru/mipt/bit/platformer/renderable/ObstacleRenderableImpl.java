@@ -18,7 +18,7 @@ public class ObstacleRenderableImpl implements ObstacleRenderable {
     private final Rectangle rectangle;
     private final ObstacleEntity obstacle;
 
-    public ObstacleRenderableImpl(String fileNameTexture, ObstacleEntity obstacle) {
+    public ObstacleRenderableImpl(ObstacleEntity obstacle, String fileNameTexture) {
         texture = new Texture(fileNameTexture);
         textureRegion = new TextureRegion(texture);
         rectangle = createBoundingRectangle(textureRegion);
