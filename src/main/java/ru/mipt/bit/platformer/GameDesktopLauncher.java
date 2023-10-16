@@ -41,6 +41,8 @@ public class GameDesktopLauncher implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         inputController.checkIsTriggeredKeyAndExecuteCommand(gameLevel.getPlayerEntities(), gameLevel.getGameEntities(), deltaTime);
+        inputController.randomIsTriggeredKeyAndExecuteCommand(gameLevel.getPlayerBotEntities(), gameLevel.getGameEntities(), deltaTime);
+
         gameLevel.updateGameState(deltaTime);
         gameRender.updateGameGraphics(gameLevel.getTileMovement());
 

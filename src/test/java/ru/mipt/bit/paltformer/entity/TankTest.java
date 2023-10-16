@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ DirectionKeyBoardAction.class })
+@PrepareForTest({DirectionKeyBoardAction.class})
 public class TankTest {
 
     @Mock
@@ -63,8 +63,6 @@ public class TankTest {
     public void testUpdatePlayerMovement_ActionNotNullAndMovementComplete_ShouldMoveToNewCoordinates() {
         when(action.apply(any(GridPoint2.class))).thenReturn(new GridPoint2(1, 1));
         when(action.getRotation()).thenReturn(90f);
-
-        tank.updateState(1f);
 
         tank.updatePlayerMovement(action, gameEntities, 1f);
 
