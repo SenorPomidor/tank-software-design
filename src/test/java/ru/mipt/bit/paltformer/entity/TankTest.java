@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import ru.mipt.bit.platformer.controller.impl.DirectionKeyBoardAction;
+import ru.mipt.bit.platformer.controller.DirectionKeyBoardAction;
 import ru.mipt.bit.platformer.entity.Tank;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 

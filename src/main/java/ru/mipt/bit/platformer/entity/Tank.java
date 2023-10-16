@@ -1,11 +1,11 @@
 package ru.mipt.bit.platformer.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.controller.impl.ShootingAction;
+import ru.mipt.bit.platformer.controller.ShootingAction;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
-import ru.mipt.bit.platformer.controller.impl.DirectionKeyBoardAction;
+import ru.mipt.bit.platformer.controller.DirectionKeyBoardAction;
 
 import java.util.List;
 import java.util.Optional;

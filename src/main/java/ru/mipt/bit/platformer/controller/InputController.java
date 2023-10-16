@@ -1,7 +1,5 @@
 package ru.mipt.bit.platformer.controller;
 
-import ru.mipt.bit.platformer.controller.impl.DirectionKeyBoardAction;
-import ru.mipt.bit.platformer.controller.impl.ShootingAction;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
@@ -12,10 +10,12 @@ public class InputController {
 
     private final List<Action> actions = new ArrayList<>();
 
-    public void checkIsTriggeredKeyAndExecuteCommand(PlayerEntity playerEntity, List<GameEntity> gameEntities, float deltaTime) {
-        for (Action action : actions) {
-            if (action.isTriggered()) {
-                action.execute(playerEntity, gameEntities, deltaTime);
+    public void checkIsTriggeredKeyAndExecuteCommand(List<PlayerEntity> playerEntities, List<GameEntity> gameEntities, float deltaTime) {
+        for (PlayerEntity playerEntity : playerEntities) {
+            for (Action action : actions) {
+                if (action.isTriggered()) {
+                    action.execute(playerEntity, gameEntities, deltaTime);
+                }
             }
         }
     }

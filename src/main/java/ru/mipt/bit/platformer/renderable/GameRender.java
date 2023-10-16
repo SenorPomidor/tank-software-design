@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
+import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
+import ru.mipt.bit.platformer.level.interfaces.GameObjectListener;
 import ru.mipt.bit.platformer.renderable.interfaces.ObstacleRenderable;
 import ru.mipt.bit.platformer.renderable.interfaces.PlayerRenderable;
 import ru.mipt.bit.platformer.util.TileMovement;
@@ -15,25 +19,19 @@ import java.util.List;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
 
-public class GameRender {
+public class GameRender implements GameObjectListener {
 
     private final Batch batch;
     private final MapRenderer levelRenderer;
+    private final TiledMapTileLayer groundLayer;
 
     private final List<PlayerRenderable> playerRenderables = new ArrayList<>();
     private final List<ObstacleRenderable> obstacleRenderables = new ArrayList<>();
 
-    public GameRender(TiledMap level) {
-        batch = new SpriteBatch();
-        levelRenderer = createSingleLayerMapRenderer(level, batch);
-    }
-
-    public void addPlayerRenderable(PlayerRenderable playerRenderable) {
-        playerRenderables.add(playerRenderable);
-    }
-
-    public void addObstacleRenderable(ObstacleRenderable obstacleRenderable) {
-        obstacleRenderables.add(obstacleRenderable);
+    public GameRender(TiledMap tiledMap, TiledMapTileLayer groundLayer) {
+        this.batch = new SpriteBatch();
+        this.groundLayer = groundLayer;
+        levelRenderer = createSingleLayerMapRenderer(tiledMap, batch);
     }
 
     public void clearScreen() {
@@ -45,6 +43,19 @@ public class GameRender {
         for (PlayerRenderable tankRender : playerRenderables) {
             tankRender.updateGameGraphics(tileMovement);
         }
+    }
+
+    @Override
+    public void onPlayerAdded(PlayerEntity playerEntity, String texture) {
+        playerRenderables.add(new PlayerRenderableImpl(playerEntity, texture));
+    }
+
+    @Override
+    public void onObstacleAdded(ObstacleEntity obstacleEntity, String texture) {
+        ObstacleRenderable obstacleRenderable = new ObstacleRenderableImpl(obstacleEntity, texture);
+
+        obstacleRenderables.add(obstacleRenderable);
+        obstacleRenderable.moveObstacle(groundLayer);
     }
 
     public void renderGame() {
