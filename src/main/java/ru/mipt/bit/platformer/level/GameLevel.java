@@ -91,6 +91,10 @@ public class GameLevel {
         return playerBotEntities;
     }
 
+    public List<ObstacleEntity> getObstacleEntities() {
+        return obstacleEntities;
+    }
+
     public List<GameEntity> getGameEntities() {
         return gameEntities;
     }

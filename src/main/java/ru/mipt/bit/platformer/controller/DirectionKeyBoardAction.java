@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
+import ru.mipt.bit.platformer.controller.interfaces.ActionVisitor;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
 
@@ -43,6 +44,11 @@ public enum DirectionKeyBoardAction implements Action {
     @Override
     public void execute(PlayerEntity currentPlayerEntity, List<GameEntity> gameEntities, float deltaTime) {
         currentPlayerEntity.updatePlayerMovement(this, gameEntities, deltaTime);
+    }
+
+    @Override
+    public org.awesome.ai.Action accept(ActionVisitor visitor) {
+        return visitor.visit(this);
     }
 
 }

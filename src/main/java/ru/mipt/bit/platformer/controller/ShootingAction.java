@@ -3,6 +3,7 @@ package ru.mipt.bit.platformer.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
+import ru.mipt.bit.platformer.controller.interfaces.ActionVisitor;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
 
@@ -27,5 +28,10 @@ public enum ShootingAction implements Action {
     @Override
     public void execute(PlayerEntity playerEntity, List<GameEntity> gameEntities, float deltaTime) {
         playerEntity.shoot(this);
+    }
+
+    @Override
+    public org.awesome.ai.Action accept(ActionVisitor visitor) {
+        return null;
     }
 }
