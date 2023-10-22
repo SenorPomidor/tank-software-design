@@ -21,7 +21,7 @@ public class RandomGeneration implements LevelGeneration {
         gameLevel.createTank(startCoordinates);
         occupiedPositions.add(startCoordinates);
 
-        IntStream.range(0, OBSTACLE_COUNT)
+        IntStream.range(0, TREE_COUNT)
                 .forEach(i -> {
                     GridPoint2 position;
                     do {
@@ -32,6 +32,19 @@ public class RandomGeneration implements LevelGeneration {
                     occupiedPositions.add(position);
 
                     gameLevel.createTree(position);
+                });
+
+        IntStream.range(0, TANK_BOT_COUNT)
+                .forEach(i -> {
+                    GridPoint2 position;
+                    do {
+                        int x = random.nextInt(MAX_X);
+                        int y = random.nextInt(MAX_Y);
+                        position = new GridPoint2(x, y);
+                    } while (occupiedPositions.contains(position));
+                    occupiedPositions.add(position);
+
+                    gameLevel.createTankBot(position);
                 });
 
         return gameLevel;

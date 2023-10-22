@@ -9,11 +9,22 @@ import java.util.*;
 public class InputController {
 
     private final List<Action> actions = new ArrayList<>();
+    private final Random random = new Random();
 
     public void checkIsTriggeredKeyAndExecuteCommand(List<PlayerEntity> playerEntities, List<GameEntity> gameEntities, float deltaTime) {
         for (PlayerEntity playerEntity : playerEntities) {
             for (Action action : actions) {
                 if (action.isTriggered()) {
+                    action.execute(playerEntity, gameEntities, deltaTime);
+                }
+            }
+        }
+    }
+
+    public void randomIsTriggeredKeyAndExecuteCommand(List<PlayerEntity> playerBotEntities, List<GameEntity> gameEntities, float deltaTime) {
+        for (PlayerEntity playerEntity : playerBotEntities) {
+            for (Action action : actions) {
+                if (random.nextInt(50) == 0) {
                     action.execute(playerEntity, gameEntities, deltaTime);
                 }
             }

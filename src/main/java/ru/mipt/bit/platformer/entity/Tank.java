@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.badlogic.gdx.math.MathUtils.isEqual;
+import static ru.mipt.bit.platformer.common.CommonVariables.MAX_X;
+import static ru.mipt.bit.platformer.common.CommonVariables.MAX_Y;
 
 public class Tank implements PlayerEntity {
 
@@ -51,10 +53,7 @@ public class Tank implements PlayerEntity {
         if (isEqualMethod() && action != null) {
             DirectionKeyBoardAction directionKeyBoardActionImpl = (DirectionKeyBoardAction) action;
             GridPoint2 destinationCoordinates = directionKeyBoardActionImpl.apply(currentCoordinates);
-            Optional<GameEntity> anyObject = gameEntities.stream()
-                    .filter(object -> object.getCoordinates().equals(destinationCoordinates))
-                    .findAny();
-            if (anyObject.isEmpty()) {
+            if (isOccupied(gameEntities, destinationCoordinates) && outOfBoundChecker(destinationCoordinates)) {
                 moveTo(destinationCoordinates);
             }
             setRotation(directionKeyBoardActionImpl.getRotation());
@@ -93,4 +92,21 @@ public class Tank implements PlayerEntity {
         return isEqual(movementProgress, 1f);
     }
 
+    private boolean outOfBoundChecker(GridPoint2 destinationCoordinates) {
+        return destinationCoordinates.x < MAX_X && destinationCoordinates.y < MAX_Y &&
+                destinationCoordinates.x >= 0 && destinationCoordinates.y >= 0;
+    }
+
+    private boolean isOccupied(List<GameEntity> gameEntities, GridPoint2 destinationCoordinates) {
+        Optional<GameEntity> anyObject = gameEntities.stream()
+                .filter(object -> {
+                    if (object instanceof PlayerEntity) {
+                        PlayerEntity playerEntity = (PlayerEntity) object;
+                        return playerEntity.getDestinationCoordinates().equals(destinationCoordinates);
+                    }
+                    return object.getCoordinates().equals(destinationCoordinates);
+                })
+                .findAny();
+        return anyObject.isEmpty();
+    }
 }
