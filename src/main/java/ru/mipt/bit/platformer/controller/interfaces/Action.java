@@ -9,5 +9,6 @@ public interface Action {
 
     boolean isTriggered();
     void execute(PlayerEntity playerEntity, List<GameEntity> gameEntities, float deltaTime);
+    org.awesome.ai.Action accept(ActionVisitor visitor);
 
 }
