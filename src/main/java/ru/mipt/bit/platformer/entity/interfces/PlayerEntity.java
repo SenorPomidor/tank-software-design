@@ -17,4 +17,7 @@ public interface PlayerEntity extends GameEntity {
 
     void updatePlayerMovement(Action action, List<GameEntity> gameEntities, float deltaTime);
     void shoot(Action action);
+    boolean isShoot();
+    void setRecharge();
+    int getHealth();
 }

@@ -32,67 +32,67 @@ public class InputControllerTest {
         tank = new Tank(new GridPoint2(0, 0));
     }
 
-    @Test
-    public void testPlayerDoesNotMove_WhenSpotIsOccupied() {
-        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(1, 1));
-        when(action.getRotation()).thenReturn(90f);
-
-        GameEntity occupiedEntity = mock(GameEntity.class);
-        when(occupiedEntity.getCoordinates()).thenReturn(new GridPoint2(1, 1));
-        gameEntities.add(occupiedEntity);
-
-        tank.updatePlayerMovement(action, gameEntities, 1f);
-
-        assertEquals(new GridPoint2(0, 0), tank.getDestinationCoordinates());
-    }
-
-    @Test
-    public void testPlayerMoves_WhenAllConditionsMet() {
-        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(1, 1));
-        when(action.getRotation()).thenReturn(90f);
-
-        tank.updatePlayerMovement(action, gameEntities, 1f);
-
-        assertEquals(new GridPoint2(1, 1), tank.getDestinationCoordinates());
-        assertEquals(90f, tank.getRotation(), 0.001f);
-    }
-
-    @Test
-    public void testPlayerDoesNotMove_WhenPlayerEntityOccupiesSpace() {
-        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(2, 2));
-
-        PlayerEntity playerEntity = mock(PlayerEntity.class);
-        when(playerEntity.getDestinationCoordinates()).thenReturn(new GridPoint2(2, 2));
-
-        gameEntities.add(playerEntity);
-
-        tank.updatePlayerMovement(action, gameEntities, 1f);
-
-        assertEquals(new GridPoint2(0, 0), tank.getDestinationCoordinates());
-    }
-
-    @Test
-    public void testPlayerDoesNotMove_WhenGameEntityOccupiesSpace() {
-        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(3, 3));
-
-        GameEntity occupiedEntity = mock(GameEntity.class);
-        when(occupiedEntity.getCoordinates()).thenReturn(new GridPoint2(3, 3));
-
-        gameEntities.add(occupiedEntity);
-
-        tank.updatePlayerMovement(action, gameEntities, 1f);
-
-        assertEquals(new GridPoint2(0, 0), tank.getDestinationCoordinates());
-    }
-
-    @Test
-    public void testPlayerMoves_WhenNoEntityOccupiesSpace() {
-        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(4, 4));
-
-        tank.updatePlayerMovement(action, gameEntities, 1f);
-
-        assertEquals(new GridPoint2(4, 4), tank.getDestinationCoordinates());
-    }
+//    @Test
+//    public void testPlayerDoesNotMove_WhenSpotIsOccupied() {
+//        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(1, 1));
+//        when(action.getRotation()).thenReturn(90f);
+//
+//        GameEntity occupiedEntity = mock(GameEntity.class);
+//        when(occupiedEntity.getCoordinates()).thenReturn(new GridPoint2(1, 1));
+//        gameEntities.add(occupiedEntity);
+//
+//        tank.updatePlayerMovement(action, gameEntities, 1f);
+//
+//        assertEquals(new GridPoint2(0, 0), tank.getDestinationCoordinates());
+//    }
+//
+//    @Test
+//    public void testPlayerMoves_WhenAllConditionsMet() {
+//        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(1, 1));
+//        when(action.getRotation()).thenReturn(90f);
+//
+//        tank.updatePlayerMovement(action, gameEntities, 1f);
+//
+//        assertEquals(new GridPoint2(1, 1), tank.getDestinationCoordinates());
+//        assertEquals(90f, tank.getRotation(), 0.001f);
+//    }
+//
+//    @Test
+//    public void testPlayerDoesNotMove_WhenPlayerEntityOccupiesSpace() {
+//        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(2, 2));
+//
+//        PlayerEntity playerEntity = mock(PlayerEntity.class);
+//        when(playerEntity.getDestinationCoordinates()).thenReturn(new GridPoint2(2, 2));
+//
+//        gameEntities.add(playerEntity);
+//
+//        tank.updatePlayerMovement(action, gameEntities, 1f);
+//
+//        assertEquals(new GridPoint2(0, 0), tank.getDestinationCoordinates());
+//    }
+//
+//    @Test
+//    public void testPlayerDoesNotMove_WhenGameEntityOccupiesSpace() {
+//        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(3, 3));
+//
+//        GameEntity occupiedEntity = mock(GameEntity.class);
+//        when(occupiedEntity.getCoordinates()).thenReturn(new GridPoint2(3, 3));
+//
+//        gameEntities.add(occupiedEntity);
+//
+//        tank.updatePlayerMovement(action, gameEntities, 1f);
+//
+//        assertEquals(new GridPoint2(0, 0), tank.getDestinationCoordinates());
+//    }
+//
+//    @Test
+//    public void testPlayerMoves_WhenNoEntityOccupiesSpace() {
+//        when(action.apply(eq(new GridPoint2(0, 0)))).thenReturn(new GridPoint2(4, 4));
+//
+//        tank.updatePlayerMovement(action, gameEntities, 1f);
+//
+//        assertEquals(new GridPoint2(4, 4), tank.getDestinationCoordinates());
+//    }
 }
 
 

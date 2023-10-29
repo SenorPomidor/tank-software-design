@@ -7,6 +7,8 @@ import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
 
 import java.util.*;
 
+import static ru.mipt.bit.platformer.common.CommonVariables.RANDOM_ACTION_PERCENTAGE;
+
 public class InputController {
 
     private final List<Action> actions = new ArrayList<>();
@@ -31,7 +33,7 @@ public class InputController {
     public void randomIsTriggeredKeyAndExecuteCommand(List<PlayerEntity> playerBotEntities, List<GameEntity> gameEntities, float deltaTime) {
         for (PlayerEntity playerEntity : playerBotEntities) {
             for (Action action : actions) {
-                if (random.nextInt(50) == 0) {
+                if (random.nextInt(RANDOM_ACTION_PERCENTAGE) == 0) {
                     action.execute(playerEntity, gameEntities, deltaTime);
                 }
             }

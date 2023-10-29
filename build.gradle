@@ -35,8 +35,8 @@ dependencies {
     implementation deps.gdx.backend_lwjgl3
     implementation deps.gdx.platform_desktop
     testImplementation 'junit:junit:4.13.2'
-    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-    implementation 'org.mockito:mockito-core:5.4.0'
+    testImplementation 'org.mockito:mockito-core:3.11.2'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
     implementation 'com.github.a-ivanov:tank-software-design-ai:v1.0.1'
 }
 

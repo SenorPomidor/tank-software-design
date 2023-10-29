@@ -36,6 +36,24 @@ public enum DirectionKeyBoardAction implements Action {
         return rotation;
     }
 
+    public static GridPoint2 applyCoordinatesByRotation(GridPoint2 point, float rotation) {
+        for (DirectionKeyBoardAction keyBoardAction : values()) {
+            if (rotation == keyBoardAction.rotation) {
+                return point.cpy().add(keyBoardAction.coordinates);
+            }
+        }
+        return null;
+    }
+
+    public static GridPoint2 getValueByRotation(float rotation) {
+        for (DirectionKeyBoardAction keyBoardAction : values()) {
+            if (rotation == keyBoardAction.rotation) {
+                return keyBoardAction.coordinates;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean isTriggered() {
         return Arrays.stream(keys).anyMatch(key -> Gdx.input.isKeyPressed(key));
