@@ -7,6 +7,11 @@ import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
 import ru.mipt.bit.platformer.controller.DirectionKeyBoardAction;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.temporal.TemporalAccessor;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +23,17 @@ public class Tank implements PlayerEntity {
 
     private static final float MOVEMENT_COMPLETED = 1f;
     private static final int MOVEMENT_STARTED = 0;
+    private static final int RECHARGE = 500;
+
+    private int health = 3;
 
     private final GridPoint2 currentCoordinates;
     private GridPoint2 destinationCoordinates;
     private float movementProgress;
     private float rotation = 0f;
+
+    public boolean isShoot = false;
+    public Date rechargeEnd;
 
     public Tank(GridPoint2 startCoordinates) {
         currentCoordinates = startCoordinates;
@@ -62,10 +73,23 @@ public class Tank implements PlayerEntity {
 
     @Override
     public void shoot(Action action) {
-        ShootingAction directionActionImpl = (ShootingAction) action;
+//        ShootingAction directionActionImpl = (ShootingAction) action;
 
-        // при нажатии на пробел, в консоли можно увидеть "ПИФ-ПАФ"
-        System.out.println("ПИФ-ПАФ");
+        if (rechargeEnd == null) {
+            rechargeEnd = new Date(Calendar.getInstance().getTime().getTime());
+        }
+
+        Date instant = Calendar.getInstance().getTime();
+
+        if (rechargeEnd.getTime() <= instant.getTime() - RECHARGE && movementProgress == 1) {
+            rechargeEnd = new Date(Calendar.getInstance().getTime().getTime() + RECHARGE);
+            isShoot = true;
+            System.out.println("Пиф-Паф");
+        } else if (!isEqualMethod()) {
+            System.out.println("Едем");
+        } else {
+            System.out.println("Перезарядка");
+        }
     }
 
     @Override
@@ -86,6 +110,22 @@ public class Tank implements PlayerEntity {
     @Override
     public GridPoint2 getDestinationCoordinates() {
         return destinationCoordinates;
+    }
+
+    public boolean isShoot() {
+        return isShoot;
+    }
+
+    public void setRecharge() {
+        isShoot = !isShoot;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     private boolean isEqualMethod() {

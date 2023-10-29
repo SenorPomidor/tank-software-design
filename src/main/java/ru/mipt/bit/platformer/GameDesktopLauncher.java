@@ -51,15 +51,15 @@ public class GameDesktopLauncher implements ApplicationListener {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         inputController.checkIsTriggeredKeyAndExecuteCommand(gameLevel.getPlayerEntities(), gameLevel.getGameEntities(), deltaTime);
-//        inputController.randomIsTriggeredKeyAndExecuteCommand(gameLevel.getPlayerBotEntities(), gameLevel.getGameEntities(), deltaTime);
+        inputController.randomIsTriggeredKeyAndExecuteCommand(gameLevel.getPlayerBotEntities(), gameLevel.getGameEntities(), deltaTime);
 
-        List<Recommendation> aiRecommendations = aiAdapter.recommend(
-                GameStateMapper.mapToGameState(
-                        gameLevel.getObstacleEntities(),
-                        gameLevel.getPlayerEntities().get(0),
-                        gameLevel.getPlayerBotEntities(),
-                        MAX_X,
-                        MAX_Y));
+//        List<Recommendation> aiRecommendations = aiAdapter.recommend(
+//                GameStateMapper.mapToGameState(
+//                        gameLevel.getObstacleEntities(),
+//                        gameLevel.getPlayerEntities().get(0),
+//                        gameLevel.getPlayerBotEntities(),
+//                        MAX_X,
+//                        MAX_Y));
 
         // Какие-либо действия с aiRecommendations...
 

@@ -4,6 +4,7 @@ public class CommonVariables {
 
     public static final String TANK_IMAGE = System.getProperty("sprite.tank.path");
     public static final String TREE_IMAGE = System.getProperty("sprite.tree.path");
+    public static final String BULLET_IMAGE = System.getProperty("sprite.bullet.path");
 
     public final static Integer TREE_COUNT = Integer.valueOf(System.getProperty("generate.random.obstacle.tree.count"));
     public final static Integer TANK_BOT_COUNT = Integer.valueOf(System.getProperty("generate.random.player.tank.count"));

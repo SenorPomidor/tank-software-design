@@ -5,6 +5,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Interpolation;
+import ru.mipt.bit.platformer.controller.DirectionKeyBoardAction;
+import ru.mipt.bit.platformer.entity.Bullet;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
@@ -17,16 +19,17 @@ import ru.mipt.bit.platformer.util.TileMovement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ru.mipt.bit.platformer.common.CommonVariables.TANK_IMAGE;
-import static ru.mipt.bit.platformer.common.CommonVariables.TREE_IMAGE;
+import static ru.mipt.bit.platformer.common.CommonVariables.*;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.continueProgress;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
 
 public class GameLevel {
 
     private static final float MOVEMENT_SPEED = 0.4f;
+    private static final float MOVEMENT_SPEED_BULLET = 0.25f;
 
     private final TiledMap level;
     private final TileMovement tileMovement;
@@ -37,6 +40,7 @@ public class GameLevel {
     private final List<PlayerEntity> playerEntities = new ArrayList<>();
     private final List<PlayerEntity> playerBotEntities = new ArrayList<>();
     private final List<ObstacleEntity> obstacleEntities = new ArrayList<>();
+    private final List<Bullet> bullets = new ArrayList<>();
 
     private final List<GameObjectListener> listeners = new ArrayList<>();
 
@@ -61,10 +65,70 @@ public class GameLevel {
         notifyListeners(obstacle, TREE_IMAGE);
     }
 
-    public void updateGameState(float deltaTime) {
-        Stream<PlayerEntity> combined = Stream.concat(playerEntities.stream(), playerBotEntities.stream());
+    public void createBullet(PlayerEntity playerEntity) {
+        Bullet bullet = new Bullet(
+                DirectionKeyBoardAction.applyCoordinatesByRotation(playerEntity.getCoordinates(), playerEntity.getRotation()),
+                playerEntity.getRotation()
+        );
+        bullets.add(bullet);
+        notifyListeners(bullet, BULLET_IMAGE);
+    }
 
-        combined.forEach(playerEntity -> playerEntity.updateState(continueProgress(playerEntity.getMovementProgress(), deltaTime, MOVEMENT_SPEED)));
+    public void updateGameState(float deltaTime) {
+        updateStateForTanks(deltaTime);
+        updateStateForBullets(deltaTime);
+    }
+
+    private void updateStateForTanks(float deltaTime) {
+        List<PlayerEntity> tanks = Stream.concat(playerEntities.stream(), playerBotEntities.stream()).collect(Collectors.toList());
+
+        tanks.forEach(playerEntity -> {
+            playerEntity.updateState(continueProgress(playerEntity.getMovementProgress(), deltaTime, MOVEMENT_SPEED));
+
+            if (playerEntity.isShoot() && !isObjectInFront(playerEntity)) {
+                createBullet(playerEntity);
+                playerEntity.setRecharge();
+            } else if (playerEntity.isShoot()) {
+                playerEntity.setRecharge();
+            }
+        });
+
+        List<PlayerEntity> tanksToRemove = new ArrayList<>();
+        tanks.stream()
+                .filter(tank -> tank.getHealth() <= 0)
+                .forEach(tank -> {
+                    tanksToRemove.add(tank);
+                    notifyDeleteListeners(tank);
+                });
+        gameEntities.removeAll(tanksToRemove);
+        playerEntities.removeAll(tanksToRemove);
+        playerBotEntities.removeAll(tanksToRemove);
+    }
+
+    private void updateStateForBullets(float deltaTime) {
+        List<Bullet> bulletsToRemove = new ArrayList<>();
+        bullets.forEach(bullet -> {
+            bullet.updateBulletMovement(gameEntities);
+            bullet.updateState(continueProgress(bullet.getMovementProgress(), deltaTime, MOVEMENT_SPEED_BULLET));
+            if (!bullet.encountered()) {
+                bulletsToRemove.add(bullet);
+                notifyDeleteListeners(bullet);
+            }
+        });
+        bullets.removeAll(bulletsToRemove);
+    }
+
+    private boolean isObjectInFront(PlayerEntity playerEntity) {
+        GridPoint2 gridPoint2 = DirectionKeyBoardAction.applyCoordinatesByRotation(playerEntity.getCoordinates(), playerEntity.getRotation());
+
+        List<PlayerEntity> players = Stream.concat(playerEntities.stream(), playerBotEntities.stream()).collect(Collectors.toList());
+
+        boolean firstСondition = players.stream()
+                .anyMatch(entity -> entity.getCoordinates().equals(gridPoint2));
+        boolean secondCondition = obstacleEntities.stream()
+                .anyMatch(entity -> entity.getCoordinates().equals(gridPoint2));
+
+        return firstСondition || secondCondition;
     }
 
     public void addListener(GameObjectListener listener) {
@@ -131,6 +195,24 @@ public class GameLevel {
     private void notifyListeners(ObstacleEntity obstacleEntity, String texture) {
         for (GameObjectListener listener : listeners) {
             listener.onObstacleAdded(obstacleEntity, texture);
+        }
+    }
+
+    private void notifyListeners(Bullet bullet, String texture) {
+        for (GameObjectListener listener : listeners) {
+            listener.onBulletAdded(bullet, texture);
+        }
+    }
+
+    private void notifyDeleteListeners(GameEntity bullet) {
+        for (GameObjectListener listener : listeners) {
+            listener.onBulletDelete(bullet);
+        }
+    }
+
+    private void notifyDeleteListeners(PlayerEntity playerEntity) {
+        for (GameObjectListener listener : listeners) {
+            listener.onPlayerDelete(playerEntity);
         }
     }
 }
