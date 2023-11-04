@@ -14,6 +14,8 @@ public class CommonVariables {
     public final static Integer MAX_X = Integer.valueOf(System.getProperty("map.max.x"));
     public final static Integer MAX_Y = Integer.valueOf(System.getProperty("map.max.y"));
 
+    public final static String HEALTH_BAR_3 = System.getProperty("sprite.health.3");
+
     public final static Integer RANDOM_ACTION_PERCENTAGE = Integer.valueOf(System.getProperty("random.action.percentage"));
 
 }

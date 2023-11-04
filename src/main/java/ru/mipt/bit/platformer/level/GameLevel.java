@@ -115,6 +115,7 @@ public class GameLevel {
                 notifyDeleteListeners(bullet);
             }
         });
+        bullets.forEach(bullet -> notifyHitListeners(bullet.getOccupiedTank()));
         bullets.removeAll(bulletsToRemove);
     }
 
@@ -213,6 +214,12 @@ public class GameLevel {
     private void notifyDeleteListeners(PlayerEntity playerEntity) {
         for (GameObjectListener listener : listeners) {
             listener.onPlayerDelete(playerEntity);
+        }
+    }
+
+    private void notifyHitListeners(PlayerEntity playerEntity) {
+        for (GameObjectListener listener : listeners) {
+            listener.onPlayerHeated(playerEntity);
         }
     }
 }

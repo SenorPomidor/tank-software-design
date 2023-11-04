@@ -21,6 +21,7 @@ public class Bullet implements GameEntity {
     private GridPoint2 destinationCoordinates;
     private float movementProgress;
     private float rotation = 0f;
+    private Tank occupiedTank;
 
     private boolean encountered = true;
 
@@ -83,8 +84,8 @@ public class Bullet implements GameEntity {
         if (anyObject.isPresent()) {
             GameEntity gameEntity = anyObject.get();
             if (gameEntity instanceof Tank) {
-                Tank tank = (Tank) gameEntity;
-                tank.setHealth(tank.getHealth() - 1);
+                occupiedTank = (Tank) gameEntity;
+                occupiedTank.setHealth(occupiedTank.getHealth() - 1);
             }
         }
 
@@ -101,4 +102,7 @@ public class Bullet implements GameEntity {
         return encountered;
     }
 
+    public Tank getOccupiedTank() {
+        return occupiedTank;
+    }
 }

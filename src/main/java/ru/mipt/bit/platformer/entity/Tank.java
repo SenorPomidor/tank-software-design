@@ -26,6 +26,7 @@ public class Tank implements PlayerEntity {
     private static final int RECHARGE = 500;
 
     private int health = 3;
+    private HealthBar healthBar;
 
     private final GridPoint2 currentCoordinates;
     private GridPoint2 destinationCoordinates;
@@ -38,11 +39,13 @@ public class Tank implements PlayerEntity {
     public Tank(GridPoint2 startCoordinates) {
         currentCoordinates = startCoordinates;
         destinationCoordinates = startCoordinates;
+        this.healthBar = new HealthBar(new GridPoint2(startCoordinates.x, startCoordinates.y));
     }
 
     @Override
     public void moveTo(GridPoint2 targetCoordinates) {
         destinationCoordinates = targetCoordinates;
+        healthBar.setDestinationCoordinates(targetCoordinates);
         movementProgress = MOVEMENT_STARTED;
     }
 
@@ -54,8 +57,10 @@ public class Tank implements PlayerEntity {
     @Override
     public void updateState(float newMovementProgress) {
         movementProgress = newMovementProgress;
+        healthBar.setMovementProgress(newMovementProgress);
         if (isEqual(movementProgress, MOVEMENT_COMPLETED)) {
             currentCoordinates.set(destinationCoordinates);
+            healthBar.setCurrentCoordinates(destinationCoordinates);
         }
     }
 
@@ -126,6 +131,10 @@ public class Tank implements PlayerEntity {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public HealthBar getHealthBar() {
+        return healthBar;
     }
 
     private boolean isEqualMethod() {
