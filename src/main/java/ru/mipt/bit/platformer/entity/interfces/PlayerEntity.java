@@ -2,6 +2,7 @@ package ru.mipt.bit.platformer.entity.interfces;
 
 import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
+import ru.mipt.bit.platformer.entity.HealthBar;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public interface PlayerEntity extends GameEntity {
     boolean isShoot();
     void setRecharge();
     int getHealth();
+    HealthBar getHealthBar();
 }

@@ -12,4 +12,5 @@ public interface GameObjectListener {
     void onBulletAdded(Bullet bullet, String texture);
     void onBulletDelete(GameEntity gameEntity);
     void onPlayerDelete(PlayerEntity gameEntity);
+    void onPlayerHeated(PlayerEntity playerEntity);
 }

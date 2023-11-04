@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.GridPoint2;
 import ru.mipt.bit.platformer.entity.Bullet;
+import ru.mipt.bit.platformer.entity.HealthBar;
+import ru.mipt.bit.platformer.entity.Tank;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.ObstacleEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
@@ -20,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
+import static ru.mipt.bit.platformer.common.CommonVariables.HEALTH_BAR_3;
 import static ru.mipt.bit.platformer.util.GdxGameUtils.createSingleLayerMapRenderer;
 
 public class GameRender implements GameObjectListener {
@@ -51,6 +55,7 @@ public class GameRender implements GameObjectListener {
     @Override
     public void onPlayerAdded(PlayerEntity playerEntity, String texture) {
         movingObjectRenderables.add(new PlayerRenderableImpl(playerEntity, texture));
+        movingObjectRenderables.add(new HealthRenderableImpl(playerEntity.getHealthBar(), HEALTH_BAR_3));
     }
 
     @Override
@@ -79,11 +84,31 @@ public class GameRender implements GameObjectListener {
 
     @Override
     public void onPlayerDelete(PlayerEntity gameEntity) {
-        Optional<MovingObjectRenderable> deletedEntity = movingObjectRenderables.stream()
-                .filter(movingObjectRenderable -> movingObjectRenderable.getGameEntity().equals(gameEntity))
-                .findFirst();
+        if (gameEntity instanceof Tank) {
+            Optional<MovingObjectRenderable> deletedPlayer = movingObjectRenderables.stream()
+                    .filter(movingObjectRenderable -> movingObjectRenderable.getGameEntity().equals(gameEntity))
+                    .findFirst();
 
-        deletedEntity.ifPresent(movingObjectRenderables::remove);
+            Optional<MovingObjectRenderable> deletedHealthBar = movingObjectRenderables.stream()
+                    .filter(movingObjectRenderable -> movingObjectRenderable.getGameEntity().equals(gameEntity.getHealthBar()))
+                    .findFirst();
+
+            deletedPlayer.ifPresent(movingObjectRenderables::remove);
+            deletedHealthBar.ifPresent(movingObjectRenderables::remove);
+        }
+    }
+
+    @Override
+    public void onPlayerHeated(PlayerEntity gameEntity) {
+        if (gameEntity instanceof Tank) {
+            Optional<MovingObjectRenderable> objectRenderable = movingObjectRenderables.stream()
+                    .filter(movingObjectRenderable -> movingObjectRenderable.getGameEntity().equals(gameEntity.getHealthBar()))
+                    .findFirst();
+
+            if (objectRenderable.isPresent() && objectRenderable.get() instanceof HealthRenderableImpl && gameEntity.getHealth() > 0) {
+                ((HealthRenderableImpl) objectRenderable.get()).setNewTexture(System.getProperty("sprite.health." + gameEntity.getHealth()));
+            }
+        }
     }
 
     public void renderGame() {
