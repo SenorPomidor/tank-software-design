@@ -1,15 +1,15 @@
 package ru.mipt.bit.platformer.entity;
 
 import com.badlogic.gdx.math.GridPoint2;
-import ru.mipt.bit.platformer.controller.ShootingAction;
+import ru.mipt.bit.platformer.controller.DirectionKeyBoardAction;
 import ru.mipt.bit.platformer.controller.interfaces.Action;
 import ru.mipt.bit.platformer.entity.interfces.GameEntity;
 import ru.mipt.bit.platformer.entity.interfces.PlayerEntity;
-import ru.mipt.bit.platformer.controller.DirectionKeyBoardAction;
+import ru.mipt.bit.platformer.entity.state.HealthyState;
+import ru.mipt.bit.platformer.entity.state.HeavyState;
+import ru.mipt.bit.platformer.entity.state.MediumState;
+import ru.mipt.bit.platformer.entity.state.PlayerState;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -24,14 +24,16 @@ public class Tank implements PlayerEntity {
     private static final float MOVEMENT_COMPLETED = 1f;
     private static final int MOVEMENT_STARTED = 0;
     private static final int RECHARGE = 500;
+    private static final int MAX_HEALTH = 3;
 
-    private int health = 3;
+    private int health;
     private HealthBar healthBar;
 
     private final GridPoint2 currentCoordinates;
     private GridPoint2 destinationCoordinates;
     private float movementProgress;
     private float rotation = 0f;
+    private PlayerState currentState;
 
     public boolean isShoot = false;
     public Date rechargeEnd;
@@ -39,6 +41,8 @@ public class Tank implements PlayerEntity {
     public Tank(GridPoint2 startCoordinates) {
         currentCoordinates = startCoordinates;
         destinationCoordinates = startCoordinates;
+        currentState = new HealthyState();
+        this.health = MAX_HEALTH;
         this.healthBar = new HealthBar(new GridPoint2(startCoordinates.x, startCoordinates.y));
     }
 
@@ -55,7 +59,17 @@ public class Tank implements PlayerEntity {
     }
 
     @Override
-    public void updateState(float newMovementProgress) {
+    public void updateState(float deltaTime) {
+        float healthPercentage = health / MAX_HEALTH;
+        if (healthPercentage > 0.7) {
+            currentState = new HealthyState();
+        } else if (healthPercentage <= 0.7 && healthPercentage > 0.15) {
+            currentState = new MediumState();
+        } else if (healthPercentage <= 0.15) {
+            currentState = new HeavyState();
+        }
+
+        float newMovementProgress = currentState.move(this, deltaTime);
         movementProgress = newMovementProgress;
         healthBar.setMovementProgress(newMovementProgress);
         if (isEqual(movementProgress, MOVEMENT_COMPLETED)) {
@@ -77,7 +91,7 @@ public class Tank implements PlayerEntity {
     }
 
     @Override
-    public void shoot(Action action) {
+    public void shoot() {
 //        ShootingAction directionActionImpl = (ShootingAction) action;
 
         if (rechargeEnd == null) {
@@ -135,6 +149,10 @@ public class Tank implements PlayerEntity {
 
     public HealthBar getHealthBar() {
         return healthBar;
+    }
+
+    public PlayerState getCurrentState() {
+        return currentState;
     }
 
     private boolean isEqualMethod() {
