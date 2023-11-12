@@ -27,7 +27,7 @@ public enum ShootingAction implements Action {
 
     @Override
     public void execute(PlayerEntity playerEntity, List<GameEntity> gameEntities, float deltaTime) {
-        playerEntity.shoot(this);
+        playerEntity.getCurrentState().shoot(playerEntity);
     }
 
     @Override

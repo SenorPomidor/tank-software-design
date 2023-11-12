@@ -28,7 +28,6 @@ import static ru.mipt.bit.platformer.util.GdxGameUtils.getSingleLayer;
 
 public class GameLevel {
 
-    private static final float MOVEMENT_SPEED = 0.4f;
     private static final float MOVEMENT_SPEED_BULLET = 0.25f;
 
     private final TiledMap level;
@@ -83,7 +82,7 @@ public class GameLevel {
         List<PlayerEntity> tanks = Stream.concat(playerEntities.stream(), playerBotEntities.stream()).collect(Collectors.toList());
 
         tanks.forEach(playerEntity -> {
-            playerEntity.updateState(continueProgress(playerEntity.getMovementProgress(), deltaTime, MOVEMENT_SPEED));
+            playerEntity.updateState(deltaTime);
 
             if (playerEntity.isShoot() && !isObjectInFront(playerEntity)) {
                 createBullet(playerEntity);
